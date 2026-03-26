@@ -36,3 +36,19 @@ def save_tag(name):
     finally:
         cursor.close()
         db.close()
+
+def save_article_tag(idArticle, idTag):
+    db = get_connection()
+    cursor = db.cursor()
+    query = "INSERT INTO article_tag (idArticle,idTag) VALUES (%s,%s);"
+    try:
+        cursor.execute(query, (idArticle, idTag))
+        db.commit()
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
+
+
+
