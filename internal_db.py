@@ -50,5 +50,19 @@ def save_article_tag(idArticle, idTag):
         cursor.close()
         db.close()
 
+def get_articles():
+    db = get_connection()
+    cursor = db.cursor()
+    query = "SELECT * FROM article;"
+    try:
+        cursor.execute(query)
+        articles = cursor.fetchall()
+        return articles
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
+
 
 
