@@ -23,3 +23,16 @@ def save_article(title, summary, date, author, source, url):
     finally:
         cursor.close()
         db.close()
+
+def save_tag(name):
+    db = get_connection()
+    cursor = db.cursor()
+    query = "INSERT INTO tag (name) VALUES (%s);"
+    try:
+        cursor.execute(query, (name,))
+        db.commit()
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
