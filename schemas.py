@@ -10,4 +10,12 @@ class ArticleByTag(BaseModel):
     summary: Optional[str] = None
     date: date
     source: str
+    url: str
     tag_name: str = Field(alias="name")
+
+class ArticleResponse(BaseModel):
+        title: str
+        summary: Optional[str] = None
+        date: date
+        source: str
+        url: str

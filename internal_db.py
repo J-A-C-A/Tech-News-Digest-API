@@ -55,9 +55,41 @@ def get_articles():
 def get_article_by_tag(name):
     db = get_connection()
     cursor = db.cursor(dictionary=True)
-    query = "SELECT a.title, a.summary, a.date, a.source, tg.name FROM article a INNER JOIN article_tag atg ON a.article_id = atg.idArticle INNER JOIN tag tg ON tg.tag_id = atg.idTag WHERE tg.name = (%s);"
+    query = "SELECT a.title, a.summary, a.date, a.source, a.url ,tg.name FROM article a INNER JOIN article_tag atg ON a.article_id = atg.idArticle INNER JOIN tag tg ON tg.tag_id = atg.idTag WHERE tg.name = (%s);"
     try:
         cursor.execute(query, (name,))
+        articles = cursor.fetchall()
+        return articles
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
+
+
+def get_articles_by_date(year,month,day):
+    db = get_connection()
+    cursor = db.cursor(dictionary=True)
+    conditions = []
+    params = []
+    base_query = "SELECT a.title, a.summary, a.source, a.date, a.url FROM article a"
+    if year is not None:
+        conditions.append("YEAR(date) = %s")
+        params.append(year)
+    if month is not None:
+        conditions.append("MONTH(date) = %s")
+        params.append(month)
+    if day is not None:
+        conditions.append("DAY(date) = %s")
+        params.append(day)
+
+    if len(conditions) == 0:
+        return "At least one parameter is obliged"
+    else:
+        base_query = base_query + " WHERE " + " AND ".join(conditions) + ";"
+
+    try:
+        cursor.execute(base_query, params)
         articles = cursor.fetchall()
         return articles
     except mysql.connector.Error as error:
