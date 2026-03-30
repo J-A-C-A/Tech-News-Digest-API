@@ -3,7 +3,7 @@ from internal_db import save_article
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-
+from endpoints import router
 
 def sync_articles():
     query = "technology"
@@ -20,3 +20,4 @@ async def lifespan(app: FastAPI):
     yield
     scheduler.shutdown()
 app = FastAPI(lifespan=lifespan)
+app.include_router(router)

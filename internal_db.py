@@ -24,18 +24,6 @@ def save_article(title, summary, date, author, source, url):
         cursor.close()
         db.close()
 
-def save_tag(name):
-    db = get_connection()
-    cursor = db.cursor()
-    query = "INSERT INTO tag (name) VALUES (%s);"
-    try:
-        cursor.execute(query, (name,))
-        db.commit()
-    except mysql.connector.Error as error:
-        print(error)
-    finally:
-        cursor.close()
-        db.close()
 
 def save_article_tag(idArticle, idTag):
     db = get_connection()
@@ -63,6 +51,33 @@ def get_articles():
     finally:
         cursor.close()
         db.close()
+
+def save_tag(name):
+    db = get_connection()
+    cursor = db.cursor()
+    query = "INSERT INTO tag (name) VALUES (%s);"
+    try:
+        cursor.execute(query, (name,))
+        db.commit()
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
+
+def delete_tag(id):
+    db = get_connection()
+    cursor = db.cursor()
+    query = "DELETE FROM tag WHERE tag_id = %s;"
+    try:
+        cursor.execute(query, (id,))
+        db.commit()
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
+
 
 
 
