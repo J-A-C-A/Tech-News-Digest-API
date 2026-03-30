@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from internal_db import save_tag, delete_tag, save_article_tag
-from schemas import TagCreate
+from internal_db import save_tag, delete_tag, save_article_tag, get_article_by_tag
+from schemas import TagCreate, ArticleByTag
 
 router = APIRouter()
 
@@ -22,5 +22,9 @@ def remove_tag(id: int):
 def connect_tag_article(article_id: int, tag_id: int):
     save_article_tag(article_id, tag_id)
     return {"message":"tag connected to article successfully"}
+
+@router.get("/articles/tag/{tag_name}", response_model=list[ArticleByTag], response_model_by_alias=False)
+def get_article_tag(tag_name: str):
+    return get_article_by_tag(tag_name)
 
 

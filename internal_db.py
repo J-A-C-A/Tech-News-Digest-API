@@ -52,6 +52,22 @@ def get_articles():
         cursor.close()
         db.close()
 
+def get_article_by_tag(name):
+    db = get_connection()
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT a.title, a.summary, a.date, a.source, tg.name FROM article a INNER JOIN article_tag atg ON a.article_id = atg.idArticle INNER JOIN tag tg ON tg.tag_id = atg.idTag WHERE tg.name = (%s);"
+    try:
+        cursor.execute(query, (name,))
+        articles = cursor.fetchall()
+        return articles
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
+
+
+
 def save_tag(name):
     db = get_connection()
     cursor = db.cursor()
