@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from internal_db import save_tag, delete_tag, save_article_tag, get_article_by_tag, get_articles_by_date
+from internal_db import save_tag, delete_tag, save_article_tag, get_article_by_tag, get_articles_by_date, get_all_tags
 from schemas import TagCreate, ArticleByTag, ArticleResponse
 from typing import Optional
 router = APIRouter()
@@ -30,5 +30,9 @@ def get_article_tag(tag_name: str):
 @router.get("/articles/date", response_model=list[ArticleResponse])
 def get_articles_date(year: Optional[int] = None, month: Optional[int] = None, day: Optional[int] = None):
     return get_articles_by_date(year, month, day)
+
+@router.get("/tags")
+def get_tags():
+    return get_all_tags()
 
 

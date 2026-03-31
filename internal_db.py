@@ -126,6 +126,20 @@ def delete_tag(id):
         cursor.close()
         db.close()
 
+def get_all_tags():
+    db = get_connection()
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT * FROM tag;"
+    try:
+        cursor.execute(query)
+        tags = cursor.fetchall()
+        return tags
+    except mysql.connector.Error as error:
+        print(error)
+    finally:
+        cursor.close()
+        db.close()
+
 
 
 
