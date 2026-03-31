@@ -19,3 +19,7 @@ class ArticleResponse(BaseModel):
         date: date
         source: str
         url: str
+
+class TagResponse(BaseModel):
+        tag_id: int
+        name: str

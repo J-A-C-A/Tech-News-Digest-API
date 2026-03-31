@@ -1,6 +1,8 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from mysql.connector import errorcode
+
 
 def get_connection():
     load_dotenv()
@@ -19,7 +21,10 @@ def save_article(title, summary, date, author, source, url):
         cursor.execute(query, (title, summary, date, author, source, url))
         db.commit()
     except mysql.connector.Error as error:
-        print(error)
+        if error.errno == errorcode.ER_DUP_ENTRY:
+            pass
+        else:
+            raise
     finally:
         cursor.close()
         db.close()
@@ -33,7 +38,10 @@ def save_article_tag(idArticle, idTag):
         cursor.execute(query, (idArticle, idTag))
         db.commit()
     except mysql.connector.Error as error:
-        print(error)
+        if error.errno == errorcode.ER_DUP_ENTRY:
+            pass
+        else:
+            raise
     finally:
         cursor.close()
         db.close()
@@ -47,7 +55,7 @@ def get_articles():
         articles = cursor.fetchall()
         return articles
     except mysql.connector.Error as error:
-        print(error)
+        raise
     finally:
         cursor.close()
         db.close()
@@ -61,7 +69,7 @@ def get_article_by_tag(name):
         articles = cursor.fetchall()
         return articles
     except mysql.connector.Error as error:
-        print(error)
+        raise
     finally:
         cursor.close()
         db.close()
@@ -93,7 +101,7 @@ def get_articles_by_date(year,month,day):
         articles = cursor.fetchall()
         return articles
     except mysql.connector.Error as error:
-        print(error)
+        raise
     finally:
         cursor.close()
         db.close()
@@ -108,7 +116,10 @@ def save_tag(name):
         cursor.execute(query, (name,))
         db.commit()
     except mysql.connector.Error as error:
-        print(error)
+        if error.errno == errorcode.ER_DUP_ENTRY:
+            pass
+        else:
+            raise
     finally:
         cursor.close()
         db.close()
@@ -135,7 +146,7 @@ def get_all_tags():
         tags = cursor.fetchall()
         return tags
     except mysql.connector.Error as error:
-        print(error)
+        raise
     finally:
         cursor.close()
         db.close()
