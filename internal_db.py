@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from fastapi import HTTPException
 from mysql.connector import errorcode
 
 
@@ -98,6 +99,25 @@ def get_articles_by_date(year,month,day):
 
     try:
         cursor.execute(base_query, params)
+        articles = cursor.fetchall()
+        return articles
+    except mysql.connector.Error as error:
+        raise
+    finally:
+        cursor.close()
+        db.close()
+
+def get_all_articles(page: int,page_size: int):
+    db = get_connection()
+    cursor = db.cursor(dictionary=True)
+
+    if page < 1 or page_size <= 0 or page_size > 100:
+        raise HTTPException(status_code=400, detail="Invalid pagination parameters")
+
+    offset = (page-1)*page_size
+    query = "SELECT a.title, a.summary, a.date, a.source, a.url FROM article a ORDER BY a.date DESC, a.title ASC LIMIT %s OFFSET %s;"
+    try:
+        cursor.execute(query, (page_size, offset))
         articles = cursor.fetchall()
         return articles
     except mysql.connector.Error as error:
