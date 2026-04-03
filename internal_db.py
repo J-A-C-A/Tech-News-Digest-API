@@ -126,7 +126,6 @@ def get_articles_by_date(year,month,day):
 def get_all_articles(page: int,page_size: int):
     db = get_connection()
     cursor = db.cursor(dictionary=True)
-
     offset = (page-1)*page_size
     query = "SELECT a.title, a.summary, a.date, a.source, a.url FROM article a ORDER BY a.date DESC, a.title ASC LIMIT %s OFFSET %s;"
     try:
@@ -139,7 +138,31 @@ def get_all_articles(page: int,page_size: int):
         cursor.close()
         db.close()
 
+def get_articles_by_search(key:str,mode:str, page:int, page_size:int):
+    db = get_connection()
+    cursor = db.cursor(dictionary=True)
+    search_text = f"%{key}%"
+    Limit = page_size
+    Offset = (page-1)*page_size
 
+    if mode.lower() == "like":
+        query= "SELECT a.title, a.summary, a.date ,a.source, a.url FROM article a WHERE a.title LIKE %s OR a.summary LIKE %s OR a.source LIKE %s LIMIT %s OFFSET %s;"
+        params= (search_text, search_text, search_text,Limit, Offset)
+    elif mode.lower() == "nlm":
+        query= "SELECT a.title, a.summary, a.date ,a.source, a.url FROM article a WHERE MATCH (a.title, a.summary, a.source) AGAINST (%s IN NATURAL LANGUAGE MODE) LIMIT %s OFFSET %s;"
+        params= (key,Limit, Offset)
+    elif mode.lower() == "bm":
+        query= "SELECT a.title, a.summary, a.date ,a.source, a.url FROM article a WHERE MATCH (a.title, a.summary, a.source) AGAINST (%s IN BOOLEAN MODE) LIMIT %s OFFSET %s;"
+        params = (key,Limit,Offset)
+    try:
+        cursor.execute(query, params)
+        articles = cursor.fetchall()
+        return articles
+    except mysql.connector.Error as error:
+        raise
+    finally:
+        cursor.close()
+        db.close()
 
 def save_tag(name):
     db = get_connection()

@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import date
 from typing import Optional
+from enum import Enum
+
 class TagCreate(BaseModel):
     name: str
 
@@ -23,3 +25,8 @@ class ArticleResponse(BaseModel):
 class TagResponse(BaseModel):
         tag_id: int
         name: str
+
+class Mode(Enum):
+    LIKE = "like"
+    NLM = "nlm"
+    BM = "bm"

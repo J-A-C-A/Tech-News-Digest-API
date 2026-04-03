@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from internal_db import save_tag, delete_tag, save_article_tag, get_article_by_tag, get_articles_by_date, get_all_tags, \
-    get_all_articles, get_article
-from schemas import TagCreate, ArticleByTag, ArticleResponse, TagResponse
+    get_all_articles, get_article, get_articles_by_search
+from schemas import TagCreate, ArticleByTag, ArticleResponse, TagResponse, Mode
 from typing import Optional
 router = APIRouter()
 
@@ -48,4 +48,10 @@ def get_one_article(id:int):
     if article is None:
         raise HTTPException(status_code=404, detail="Article not found")
     return article
+
+@router.get("/articles/search", response_model=list[ArticleResponse])
+def get_articles_by_text(text: str, mode:Mode, page:int, page_size:int):
+    if page < 1 or page_size <= 0 or page_size > 100:
+        raise HTTPException(status_code=400, detail="Invalid pagination parameters")
+    return get_articles_by_search(text, mode.value, page, page_size)
 
