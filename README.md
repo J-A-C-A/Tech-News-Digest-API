@@ -22,19 +22,18 @@ Dane tagu składają się z:
 - name
 
 ====FUNKCJONALNOŚCI====
+
 - automatyczne pobieranie artykułów z zewnętrznego API
 - zapisywanie danych w bazie MySQL
 -zapobieganie duplikatom (unikalny URL)
 - pobieranie listy artykułów z paginacją
 - pobieranie pojedynczego artykułu po ID
-- wyszukiwanie artykułów:
-LIKE (dopasowanie tekstu)
-FULLTEXT NATURAL LANGUAGE MODE
-FULLTEXT BOOLEAN MODE
+- wyszukiwanie artykułów: LIKE (dopasowanie tekstu), FULLTEXT NATURAL LANGUAGE MODE, FULLTEXT BOOLEAN MODE
 - relacja artykuł–tag (many-to-many)
 - filtrowanie artykułów po dacie i tagach
 
 ====WYKORZYSTANE NARZĘDZIA====
+
 - FastAPI – framework do tworzenia API
 - PyDantic – walidacja danych
 - Uvicorn – serwer aplikacji
@@ -45,6 +44,7 @@ FULLTEXT BOOLEAN MODE
 - Typing – adnotacje typów
 
 ====ENDPOINTY====
+
 - pobieranie artykułów z paginacją i filtrami
 - pobieranie pojedynczego artykułu
 - wyszukiwanie artykułów
@@ -54,6 +54,7 @@ FULLTEXT BOOLEAN MODE
 - przypisanie tagu do artykułu
 
 ====PLIKI====
+
 endpoints.py - zawiera definicje endpointów działających na bazie danych użytkownika
 external_db.py - zawiera połączenie z News API
 internal_db.py - zawiera połączenie z bazą danych użytkownika, które przechowuje pobrane z News API artykuły oraz definicje funkcji z zapytaniami SQL wykonujące operacje na bazie
