@@ -1,4 +1,5 @@
 ====OPIS PROJEKTU====
+
 Tech News Digest API jest to aplikacja backendowa służąca do pobierania, przechowywania oraz przeszukiwania artykułów technologicznych.
 
 Aplikacja integruje się z zewnętrznym API (NewsAPI), zapisuje artykuły w bazie danych oraz udostępnia endpointy umożliwiające:
